@@ -17,19 +17,17 @@ class JsonApplicationTests {
         Gson gson = new Gson();
         JsonElement json = gson.fromJson(page, JsonElement.class);
 
-        printJsonObject(json);
+        jsonObjectProcessing(json);
 
         System.out.println(page);
     }
 
-    private void printJsonObject(JsonElement json) {
+    private void jsonObjectProcessing(JsonElement json) {
         if (json.isJsonObject()) {
             System.out.println("É um json object");
             JsonObject jsonObject = json.getAsJsonObject();
-            Iterator<String> iterator = jsonObject.keySet().iterator();
 
-            while (iterator.hasNext()) {
-                String key = iterator.next();
+            for (String key : jsonObject.keySet()) {
                 JsonElement value = jsonObject.get(key);
                 System.out.println("Key: " + key + "=> Value: " + value);
                 if (jsonObject.has("template")) {
@@ -46,14 +44,14 @@ class JsonApplicationTests {
                     }
                 }
                 if (value.isJsonArray() || value.isJsonObject()) {
-                    printJsonObject(value);
+                    jsonObjectProcessing(value);
                 }
             }
         } else if (json.isJsonArray()) {
             JsonArray jsonArray = json.getAsJsonArray();
             System.out.println("É um json array");
             for (JsonElement jsonElement : jsonArray) {
-                printJsonObject(jsonElement);
+                jsonObjectProcessing(jsonElement);
             }
         } else if (json.isJsonPrimitive()) {
             System.out.println("É um json Primitivo" + json);
